@@ -9,13 +9,18 @@ import javax.persistence.Id;
 @Entity
 @Getter @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
-public class Person {
+public class NewPerson {
     @Id
     @GeneratedValue
     private int id;
 
     private String name;
+
     private int salary;
+
+    public NewPerson(String name, int salary) {
+        this.name = name;
+        this.salary = salary;
+    }
 }
