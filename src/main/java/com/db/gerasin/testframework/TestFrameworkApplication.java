@@ -22,13 +22,15 @@ public class TestFrameworkApplication {
 
         List<Person> people = xmlParser.readFromFile();
 
-//        PersonRepository repository = context.getBean(PersonRepository.class);
+        PersonRepository repository = context.getBean(PersonRepository.class);
 
-//        Iterable<Person> people = repository.findAll();
-       /* log.info("People found with findAll():");
-        log.info("-------------------------------");*/
-/*        for (Person person : people) {
+        repository.save(people.get(0));
+
+        Iterable<Person> peopleFromDB = repository.findAll();
+        log.info("People found with findAll():");
+        log.info("-------------------------------");
+        for (Person person : peopleFromDB) {
             log.info(person.toString());
-        }*/
+        }
     }
 }

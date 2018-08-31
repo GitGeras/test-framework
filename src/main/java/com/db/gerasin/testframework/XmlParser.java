@@ -19,13 +19,13 @@ import java.util.stream.Collectors;
 @Service
 public class XmlParser {
 
-    List<Person> predefinedPeople = Arrays.asList(
+    static List<Person> predefinedPeople = Arrays.asList(
             new Person("John"),
             new Person("Sam"),
             new Person("Andrew"),
             new Person("Bred"));
 
-    public static List<Person> readFromFile() throws IOException {
+    public List<Person> readFromFile() throws IOException {
         File file = new File(getPathName());
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
         String result = bufferedReader.lines().collect(Collectors.joining("\n"));

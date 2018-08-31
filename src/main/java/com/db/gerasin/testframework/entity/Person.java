@@ -7,14 +7,24 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-@Data
+@Getter @Setter
+@ToString
 public class Person {
     @Id
     @GeneratedValue
-    private Long id;
+    private int id;
+
     private String name;
 
     public Person(String name) {
         this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
