@@ -1,5 +1,6 @@
 package com.db.gerasin.testframework.service;
 
+import com.db.gerasin.testframework.dao.SourceDao;
 import com.db.gerasin.testframework.entity.NewPerson;
 import com.db.gerasin.testframework.entity.Person;
 import com.db.gerasin.testframework.repository.NewPersonRepository;
@@ -21,7 +22,7 @@ import java.util.*;
 public class CommandService implements CommandServiceMBean {
 
     @Autowired
-    private PersonRepository personRepository;
+    private SourceDao sourceDao;
     @Autowired
     private NewPersonRepository newPersonRepository;
 
@@ -42,7 +43,7 @@ public class CommandService implements CommandServiceMBean {
     @Override
     public void readFromFileToDB() {
         List<Person> people = xmlParser.readFromFile();
-        personRepository.saveAll(people);
+        sourceDao.saveAll(people);
     }
 
     @Override

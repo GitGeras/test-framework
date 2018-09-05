@@ -37,7 +37,7 @@ public class XmlParser {
     }
 
     protected static String getPathName() {
-        return TestFrameworkApplication.class.getClassLoader().getResource(".").getFile() + "/test.xml";
+        return TestFrameworkApplication.class.getClassLoader().getResource(".").getFile() + "/source.xml";
     }
 
     private static List<Person> parseToPersonList(String xml) throws IOException {
