@@ -1,19 +1,14 @@
 package com.db.gerasin.testframework.service;
 
 import com.db.gerasin.testframework.dao.SourceDao;
-import com.db.gerasin.testframework.entity.NewPerson;
-import com.db.gerasin.testframework.entity.Person;
-import com.db.gerasin.testframework.repository.NewPersonRepository;
-import com.db.gerasin.testframework.repository.PersonRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.fluttercode.datafactory.impl.DataFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 @Data
@@ -23,8 +18,6 @@ public class CommandService implements CommandServiceMBean {
 
     @Autowired
     private SourceDao sourceDao;
-    @Autowired
-    private NewPersonRepository newPersonRepository;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -35,6 +28,9 @@ public class CommandService implements CommandServiceMBean {
     @Autowired
     private CsvParser csvParser;
 
+    @Autowired
+    private SqlParser sqlParser;
+
     @Override
     public void writeToXml() {
         xmlParser.writeToXml();
@@ -42,17 +38,17 @@ public class CommandService implements CommandServiceMBean {
 
     @Override
     public void readFromFileToDB() {
-        List<Person> people = xmlParser.readFromFile();
-        sourceDao.saveAll(people);
+        List<Map<String, String>> source = xmlParser.readFromFile();
+        sourceDao.saveAll(sqlParser.getSourceTableName(), source);
     }
 
     @Override
     public void readFromDB() {
-        Iterable<Person> peopleFromDB = personRepository.findAll();
+        List<Map<String, String>> list = sourceDao.findAll(sqlParser.getSourceTableName());
         log.info("People found with findAll():");
         log.info("-------------------------------");
-        for (Person person : peopleFromDB) {
-            log.info(person.toString());
+        for (Map<String, String> map : list) {
+            log.info(map.toString());
         }
     }
 
@@ -65,35 +61,41 @@ public class CommandService implements CommandServiceMBean {
                 .collect(Collectors.toList());
         newPersonRepository.saveAll(newPeople);*/
 
-        NewPerson[] newPeople = restTemplate.getForObject("http://localhost:8081/get", NewPerson[].class);
-        newPersonRepository.saveAll(Arrays.asList(newPeople));
+//        NewPerson[] newPeople = restTemplate.getForObject("http://localhost:8081/get", NewPerson[].class);
+        DataFactory dataFactory = new DataFactory();
+
+        List<Map<String, String>> predefinedPeople = new ArrayList<>();
+
+        for (int i = 0; i < 4; i++) {
+            Map<String, String> map = new HashMap<>();
+            map.put("id", String.valueOf(i));
+            map.put("name", dataFactory.getName());
+            Integer salary = Integer.valueOf(dataFactory.getNumberText(4)) + 100;
+            map.put("salary", salary.toString());
+            predefinedPeople.add(map);
+        }
+
+        sourceDao.saveAll(sqlParser.getFinalTableName(), predefinedPeople);
     }
 
     @Override
     @SneakyThrows
     public boolean test() {
-        Iterable<NewPerson> newPeopleFromDB = newPersonRepository.findAll();
-        Iterator<NewPerson> iter2 = newPeopleFromDB.iterator();
+        List<Map<String, String>> actualList = sourceDao.findAll(sqlParser.getFinalTableName());
 
-        List<Map<String, String>> mapList = csvParser.readFromFile();
+        List<Map<String, String>> expectedList = csvParser.readFromFile();
 
-        for (Map<String, String> map : mapList) {
-            NewPerson newPerson = iter2.next();
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                Field declaredField = newPerson.getClass().getDeclaredField(entry.getKey());
-                declaredField.setAccessible(true);
-                Object o = declaredField.get(newPerson);
-                if (!Objects.equals(o.toString(), entry.getValue())) {
-                    log.info(newPerson + " is not equal to " + map);
+        for (int i = 0; i < expectedList.size(); i++) {
+            Map<String, String> expectedMap = expectedList.get(i);
+            Map<String, String> actualMap = actualList.get(i);
+            for (Map.Entry<String, String> expectedEntry : expectedMap.entrySet()) {
+                String actualValue = actualMap.get(expectedEntry.getKey());
+                if (!Objects.equals(actualValue, expectedEntry.getValue())) {
+                    log.info("actual " + actualMap + " is not equal to expected" + expectedMap);
                     return false;
                 }
             }
         }
         return true;
-    }
-
-    private boolean match(Person person, NewPerson newPerson) {
-        return Objects.equals(person.getName(), newPerson.getName())
-                && Objects.equals(person.getSalary() + 100, newPerson.getSalary());
     }
 }

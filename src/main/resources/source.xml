@@ -1,22 +1,22 @@
-<ArrayList>
-  <item>
+<list>
+  <map>
+    <name>Lindsey Craft</name>
     <id>1</id>
-    <name>John</name>
-    <salary>100</salary>
-  </item>
-  <item>
+    <salary>6182</salary>
+  </map>
+  <map>
+    <name>Ryan Levine</name>
     <id>2</id>
-    <name>Sam</name>
-    <salary>300</salary>
-  </item>
-  <item>
+    <salary>8434</salary>
+  </map>
+  <map>
+    <name>Brooklyn Sloan</name>
     <id>3</id>
-    <name>Andrew</name>
-    <salary>500</salary>
-  </item>
-  <item>
+    <salary>8131</salary>
+  </map>
+  <map>
+    <name>Eddie O&apos;neill</name>
     <id>4</id>
-    <name>Bred</name>
-    <salary>1000</salary>
-  </item>
-</ArrayList>
+    <salary>9734</salary>
+  </map>
+</list>
