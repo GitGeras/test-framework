@@ -1,4 +1,4 @@
-package com.db.gerasin.testframework.parser;
+package com.db.gerasin.testframework.csv;
 
 import com.db.gerasin.testframework.TestFrameworkApplication;
 import com.fasterxml.jackson.databind.MappingIterator;

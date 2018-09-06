@@ -1,12 +1,11 @@
 package com.db.gerasin.testframework.mbean;
 
-import com.db.gerasin.testframework.entity.ChangedPerson;
-import com.db.gerasin.testframework.entity.Person;
-import com.db.gerasin.testframework.parser.CsvParser;
-import com.db.gerasin.testframework.parser.XmlParser;
-import com.db.gerasin.testframework.repository.ChangedPersonRepository;
-import com.db.gerasin.testframework.repository.PersonRepository;
 import com.db.gerasin.testframework.caller.ServiceCaller;
+import com.db.gerasin.testframework.entity.Result;
+import com.db.gerasin.testframework.csv.CsvParser;
+import com.db.gerasin.testframework.repository.DbService;
+import com.db.gerasin.testframework.xml.DealXml;
+import com.db.gerasin.testframework.xml.XmlParser;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +24,7 @@ import java.util.Objects;
 public class CommandService implements CommandServiceMBean {
 
     @Autowired
-    private PersonRepository personRepository;
-
-    @Autowired
-    private ChangedPersonRepository changedPersonRepository;
+    private DbService dbService;
 
     @Autowired
     private XmlParser xmlParser;
@@ -41,8 +37,8 @@ public class CommandService implements CommandServiceMBean {
 
     @Override
     public void readFromFileToDB() {
-        List<Person> people = xmlParser.readFromFile();
-        personRepository.saveAll(people);
+        List<DealXml> deals = xmlParser.readFromFile();
+        dbService.saveAll(deals);
     }
 
     @Override
@@ -54,18 +50,18 @@ public class CommandService implements CommandServiceMBean {
     @Override
     @SneakyThrows
     public boolean areActualResultsEqualToExpected() {
-        Iterator<ChangedPerson> actualResultsIterator = changedPersonRepository.findAll().iterator();
+        Iterator<Result> actualResultsIterator = dbService.getResults().iterator();
 
         List<Map<String, String>> expectedResults = csvParser.readFromFile();
 
         for (Map<String, String> expectedResultMap : expectedResults) {
-            ChangedPerson changedPerson = actualResultsIterator.next();
+            Result result = actualResultsIterator.next();
             for (Map.Entry<String, String> entry : expectedResultMap.entrySet()) {
-                Field declaredField = changedPerson.getClass().getDeclaredField(entry.getKey());
+                Field declaredField = result.getClass().getDeclaredField(entry.getKey());
                 declaredField.setAccessible(true);
-                Object o = declaredField.get(changedPerson);
+                Object o = declaredField.get(result);
                 if (!Objects.equals(o.toString(), entry.getValue())) {
-                    log.info(changedPerson + " is not equal to " + expectedResultMap);
+                    log.info(result + " is not equal to " + expectedResultMap);
                     return false;
                 }
             }

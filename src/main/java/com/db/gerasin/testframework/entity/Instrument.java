@@ -11,14 +11,8 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Builder
-public class Deal {
+public class Instrument {
     @Id
     private int id;
-    private int amount;
-    private int quantity;
-    private char type;
-    private int counterpartyId;
-    private int instrumentId;
-
+    private String name;
 }

@@ -1,5 +1,6 @@
-id,name,salary
-5,John,200
-6,Sam,400
-7,Andrew,600
-8,Bred,1100
+counterpartyId,counterpartyName,dealsQty
+1,Alan,4
+2,Alex,4
+3,Victor,4
+4,Benjamin,4
+5,Nick,4
