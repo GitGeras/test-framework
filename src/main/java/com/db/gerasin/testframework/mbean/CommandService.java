@@ -6,15 +6,18 @@ import com.db.gerasin.testframework.parser.CsvParser;
 import com.db.gerasin.testframework.parser.XmlParser;
 import com.db.gerasin.testframework.repository.ChangedPersonRepository;
 import com.db.gerasin.testframework.repository.PersonRepository;
+import com.db.gerasin.testframework.caller.ServiceCaller;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Data
 @Service
@@ -23,17 +26,18 @@ public class CommandService implements CommandServiceMBean {
 
     @Autowired
     private PersonRepository personRepository;
-    @Autowired
-    private ChangedPersonRepository changedPersonRepository;
 
     @Autowired
-    private RestTemplate restTemplate;
+    private ChangedPersonRepository changedPersonRepository;
 
     @Autowired
     private XmlParser xmlParser;
 
     @Autowired
     private CsvParser csvParser;
+
+    @Autowired
+    private ServiceCaller serviceCaller;
 
     @Override
     public void readFromFileToDB() {
@@ -44,14 +48,7 @@ public class CommandService implements CommandServiceMBean {
     @Override
     @SneakyThrows
     public void generateResults() {
-        /*Iterable<Person> peopleFromDB = personRepository.findAll();
-        List<ChangedPerson> newPeople = StreamSupport.stream(peopleFromDB.spliterator(), false)
-                .map(old -> new ChangedPerson(old.getName(), old.getSalary() + 100))
-                .collect(Collectors.toList());
-        changedPersonRepository.saveAll(newPeople);*/
-
-        ChangedPerson[] newPeople = restTemplate.getForObject("http://localhost:8081/get", ChangedPerson[].class);
-        changedPersonRepository.saveAll(Arrays.asList(newPeople));
+        serviceCaller.call();
     }
 
     @Override

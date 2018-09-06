@@ -22,36 +22,32 @@ import java.util.stream.Collectors;
 @Service
 public class XmlParser {
 
-    static List<Person> predefinedPeople = Arrays.asList(
+    private XmlMapper mapper = new XmlMapper();
+
+    private static List<Person> predefinedPeople = Arrays.asList(
             new Person(1, "John", 100),
             new Person(2, "Sam", 300),
             new Person(3, "Andrew", 500),
             new Person(4, "Bred", 1000));
 
+    private String xmlPath = TestFrameworkApplication.class.getClassLoader().getResource(".").getFile() + "/test.xml";
+
     @SneakyThrows
     public List<Person> readFromFile() {
-        File file = new File(getPathName());
+        File file = new File(xmlPath);
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
         String result = bufferedReader.lines().collect(Collectors.joining("\n"));
         return parseToPersonList(result);
     }
 
-    protected static String getPathName() {
-        return TestFrameworkApplication.class.getClassLoader().getResource(".").getFile() + "/test.xml";
-    }
-
-    private static List<Person> parseToPersonList(String xml) throws IOException {
-        XmlMapper mapper = new XmlMapper();
-        ArrayList<Person> arrayList = mapper.readValue(xml, new TypeReference<List<Person>>(){});
-//        return ((PersonList) xStream.fromXML(xml)).getList();
-        return arrayList;
+    private List<Person> parseToPersonList(String xml) throws IOException {
+        return mapper.readValue(xml, new TypeReference<List<Person>>(){});
     }
 
     @SneakyThrows
     public void writeToXml() {
-        XmlMapper mapper = new XmlMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        File file = new File(getPathName());
+        File file = new File(xmlPath);
         if (!file.exists()) {
             file.createNewFile();
         }
