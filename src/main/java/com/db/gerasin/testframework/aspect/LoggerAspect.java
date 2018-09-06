@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class LoggerAspect {
-    @Before("execution(* com.db.gerasin.testframework.service.CommandService.*(..))")
+    @Before("execution(* com.db.gerasin.testframework.mbean.CommandService.*(..))")
     public void beforeSayMethods(JoinPoint jp) {
         log.info(jp.getTarget().getClass().getSimpleName() + ": " + jp.getSignature().getName() + " invoked");
     }

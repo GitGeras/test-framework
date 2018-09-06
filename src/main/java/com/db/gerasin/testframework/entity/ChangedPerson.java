@@ -10,7 +10,7 @@ import javax.persistence.Id;
 @Getter @Setter
 @NoArgsConstructor
 @ToString
-public class NewPerson {
+public class ChangedPerson {
     @Id
     @GeneratedValue
     private int id;
@@ -19,7 +19,7 @@ public class NewPerson {
 
     private int salary;
 
-    public NewPerson(String name, int salary) {
+    public ChangedPerson(String name, int salary) {
         this.name = name;
         this.salary = salary;
     }
