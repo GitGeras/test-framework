@@ -12,7 +12,6 @@ import javax.persistence.Id;
 @ToString
 public class ChangedPerson {
     @Id
-    @GeneratedValue
     private int id;
 
     private String name;
