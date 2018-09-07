@@ -17,12 +17,12 @@ public class TestFrameworkApplication {
     }
 
     @Bean
-    public RestTemplate restTemplate(){
+    public RestTemplate restTemplate() {
         return new RestTemplate();
     }
 
     @Bean
-    public XmlMapper mapper(){
+    public XmlMapper mapper() {
         return new XmlMapper();
     }
 }

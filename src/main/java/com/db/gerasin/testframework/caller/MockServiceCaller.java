@@ -7,6 +7,7 @@ import com.db.gerasin.testframework.repository.CounterpartyRepository;
 import com.db.gerasin.testframework.repository.DealRepository;
 import com.db.gerasin.testframework.repository.ResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
+@Profile("mock")
 public class MockServiceCaller implements ServiceCaller {
 
     @Autowired
@@ -47,8 +49,5 @@ public class MockServiceCaller implements ServiceCaller {
         }
 
         resultRepository.saveAll(results);
-
-//        ChangedPerson[] newPeople = restTemplate.getForObject("http://localhost:8081/get", ChangedPerson[].class);
-//        changedPersonRepository.saveAll(Arrays.asList(newPeople));
     }
 }

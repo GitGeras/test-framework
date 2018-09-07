@@ -32,7 +32,7 @@ public class XmlGenerator {
         if (!file.exists()) {
             file.createNewFile();
         }
-        log.info("Write to file:");
+        log.info("Write to file");
         mapper.writeValue(file, new DealXmlWrapper(predefinedEntities));
     }
 
