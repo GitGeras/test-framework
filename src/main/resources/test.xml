@@ -154,8 +154,8 @@
     <amount>3053</amount>
     <quantity>74</quantity>
     <type>S</type>
-    <counterpartyId>1</counterpartyId>
-    <counterpartyName>Alan</counterpartyName>
+    <counterpartyId>2</counterpartyId>
+    <counterpartyName>Alex</counterpartyName>
     <instrumentId>1</instrumentId>
     <instrumentName>USD</instrumentName>
   </item>
@@ -184,8 +184,8 @@
     <amount>6964</amount>
     <quantity>26</quantity>
     <type>B</type>
-    <counterpartyId>4</counterpartyId>
-    <counterpartyName>Benjamin</counterpartyName>
+    <counterpartyId>3</counterpartyId>
+    <counterpartyName>Victor</counterpartyName>
     <instrumentId>1</instrumentId>
     <instrumentName>USD</instrumentName>
   </item>
